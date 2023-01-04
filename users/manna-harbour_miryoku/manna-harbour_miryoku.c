@@ -11,6 +11,7 @@ enum layers { MIRYOKU_LAYER_NAMES };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [BASE]   = U_MACRO_VA_ARGS(LAYOUT_miryoku, MIRYOKU_LAYER_BASE),
+  [QWERTY] = U_MACRO_VA_ARGS(LAYOUT_miryoku, MIRYOKU_ALTERNATIVES_BASE_QWERTY),
   [NAV]    = U_MACRO_VA_ARGS(LAYOUT_miryoku, MIRYOKU_LAYER_NAV),
   [MOUSE]  = U_MACRO_VA_ARGS(LAYOUT_miryoku, MIRYOKU_LAYER_MOUSE),
   [MEDIA]  = U_MACRO_VA_ARGS(LAYOUT_miryoku, MIRYOKU_LAYER_MEDIA),
@@ -18,7 +19,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [SYM]    = U_MACRO_VA_ARGS(LAYOUT_miryoku, MIRYOKU_LAYER_SYM),
   [FUN]    = U_MACRO_VA_ARGS(LAYOUT_miryoku, MIRYOKU_LAYER_FUN),
   [BUTTON] = U_MACRO_VA_ARGS(LAYOUT_miryoku, MIRYOKU_LAYER_BUTTON)
-};
+}
 
 #if defined (MIRYOKU_KLUDGE_THUMBCOMBOS)
 const uint16_t PROGMEM thumbcombos_base_right[] = {LT(SYM, KC_ENT), LT(NUM, KC_BSPC), COMBO_END};
@@ -47,4 +48,95 @@ combo_t key_combos[COMBO_COUNT] = {
   #endif
   COMBO(thumbcombos_fun, KC_APP)
 };
+#endif
+
+/* -------------------------------------------------------------------------- */
+/*                                 My changes                                 */
+/* -------------------------------------------------------------------------- */
+
+#define TOGGLE_KEYBOARD_LAYOUT KC_F13
+
+struct language_state_t {
+    bool is_colemak;
+};
+struct language_state_t language_state = {true};
+
+void toggle_os_language(void) {
+    register_code(KC_LGUI);
+    register_code(KC_K);
+    unregister_code(KC_K);
+    unregister_code(KC_LGUI);
+}
+
+void toggle_language_state(void) {
+    language_state.is_colemak = !language_state.is_colemak;
+    set_single_persistent_default_layer(language_state.is_colemak ? BASE : QWERTY);
+    // default_layer_set((layer_state_t)1 << (language_state.is_colemak ? BASE : QWERTY)); // alternative impl. for the above line (untested, but taken from Miryoku's latest tap-dance feature)
+}
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch(keycode) {
+        // TODO: to support this, need to add keycodes like `_COLEMAK_DH` to the actual layouts in "miryoku_alternatives.h".
+        // case _COLEMAK_DH:
+        // case _QWERTY:
+        //     if (record->event.pressed) {
+        //         language_state.is_colemak = (keycode == _COLEMAK_DH);
+        //         return false;
+        //     }
+        //     break;
+
+        case TOGGLE_KEYBOARD_LAYOUT:
+            if (record->event.pressed) {
+                toggle_language_state();
+                toggle_os_language();
+                return false;
+            }
+            break;
+    }
+    return true;
+}
+
+// TODO: add caps word (and maybe auto shift?), since shifting words that require both halves of the keyboads is difficult without caps lock
+
+#ifdef ENCODER_ENABLE
+bool encoder_update_user(uint8_t index, bool clockwise) {
+    // default behavior if undefined
+    if (IS_LAYER_ON(MEDIA)) {
+        if (index == 1) {
+        #ifdef ENCODERS_B_REVERSE
+            if (!clockwise) {
+        #else
+            if (clockwise) {
+        #endif
+                tap_code(KC_VOLU);
+            } else {
+                tap_code(KC_VOLD);
+            }
+        }
+    } else {
+        if (index == 0) {
+            #ifdef ENCODERS_A_REVERSE
+                if (!clockwise) {
+            #else
+                if (clockwise) {
+            #endif
+                tap_code16(C(KC_PGDN));
+            } else {
+                tap_code16(C(KC_PGUP));
+            }
+        } else if (index == 1) {
+        #ifdef ENCODERS_B_REVERSE
+            if (!clockwise) {
+        #else
+            if (clockwise) {
+        #endif
+                tap_code16(C(KC_RGHT));
+            } else {
+                tap_code16(C(KC_LEFT));
+            }
+        }
+    }
+
+    return true;
+}
 #endif
