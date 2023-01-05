@@ -19,7 +19,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [SYM]    = U_MACRO_VA_ARGS(LAYOUT_miryoku, MIRYOKU_LAYER_SYM),
   [FUN]    = U_MACRO_VA_ARGS(LAYOUT_miryoku, MIRYOKU_LAYER_FUN),
   [BUTTON] = U_MACRO_VA_ARGS(LAYOUT_miryoku, MIRYOKU_LAYER_BUTTON)
-}
+};
 
 #if defined (MIRYOKU_KLUDGE_THUMBCOMBOS)
 const uint16_t PROGMEM thumbcombos_base_right[] = {LT(SYM, KC_ENT), LT(NUM, KC_BSPC), COMBO_END};
@@ -96,8 +96,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
-// TODO: add caps word (and maybe auto shift?), since shifting words that require both halves of the keyboads is difficult without caps lock
-
 #ifdef ENCODER_ENABLE
 bool encoder_update_user(uint8_t index, bool clockwise) {
     // default behavior if undefined
@@ -140,3 +138,5 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
     return true;
 }
 #endif
+
+// TODO: add retro shift?
