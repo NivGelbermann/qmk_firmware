@@ -76,15 +76,6 @@ void toggle_language_state(void) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch(keycode) {
-        // TODO: to support this, need to add keycodes like `_COLEMAK_DH` to the actual layouts in "miryoku_alternatives.h".
-        // case _COLEMAK_DH:
-        // case _QWERTY:
-        //     if (record->event.pressed) {
-        //         language_state.is_colemak = (keycode == _COLEMAK_DH);
-        //         return false;
-        //     }
-        //     break;
-
         case TOGGLE_KEYBOARD_LAYOUT:
             if (record->event.pressed) {
                 toggle_language_state();
