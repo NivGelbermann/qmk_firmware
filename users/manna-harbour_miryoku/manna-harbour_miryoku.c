@@ -6,6 +6,8 @@
 #include QMK_KEYBOARD_H
 
 #include "manna-harbour_miryoku.h"
+#include "features/layer_lock.h"
+
 
 enum layers { MIRYOKU_LAYER_NAMES };
 
@@ -75,6 +77,7 @@ void toggle_language_state(void) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (!process_layer_lock(keycode, record, LLOCK)) { return false; }
     switch(keycode) {
         case TOGGLE_KEYBOARD_LAYOUT:
             if (record->event.pressed) {
