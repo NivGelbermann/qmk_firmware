@@ -5,3 +5,6 @@
 
 #pragma once
 
+#define BILATERAL_COMBINATIONS
+#define ENCODERS_A_REVERSE
+#define ENCODERS_B_REVERSE

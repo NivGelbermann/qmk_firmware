@@ -40,5 +40,3 @@
   #define U_UND KC_UNDO
 #endif
 
-#define ENCODERS_A_REVERSE
-#define ENCODERS_B_REVERSE
