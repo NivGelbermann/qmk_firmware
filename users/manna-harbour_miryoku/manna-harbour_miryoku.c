@@ -8,7 +8,6 @@
 #include "manna-harbour_miryoku.h"
 #include "features/layer_lock.h"
 
-
 enum layers { MIRYOKU_LAYER_NAMES };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -73,7 +72,6 @@ void toggle_os_language(void) {
 void toggle_language_state(void) {
     language_state.is_colemak = !language_state.is_colemak;
     set_single_persistent_default_layer(language_state.is_colemak ? BASE : QWERTY);
-    // default_layer_set((layer_state_t)1 << (language_state.is_colemak ? BASE : QWERTY)); // alternative impl. for the above line (untested, but taken from Miryoku's latest tap-dance feature)
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -132,5 +130,3 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
     return true;
 }
 #endif
-
-// TODO: add retro shift?
