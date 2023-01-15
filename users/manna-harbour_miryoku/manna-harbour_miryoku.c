@@ -57,6 +57,17 @@ combo_t key_combos[COMBO_COUNT] = {
 
 #define TOGGLE_KEYBOARD_LAYOUT KC_F13
 
+enum combos {
+  DH_CAPS_WORD,
+  SPC_BSPC_TOGGLE_KEYBOARD_LAYOUT,
+};
+const uint16_t PROGMEM caps_word_combo[] = {KC_D, KC_H, COMBO_END};
+const uint16_t PROGMEM toggle_layout_combo[] = {LT(NAV, KC_SPC), LT(SYM, KC_BSPC), COMBO_END};
+combo_t key_combos[COMBO_COUNT] = {
+  [DH_CAPS_WORD] = COMBO(caps_word_combo, CAPSWRD),
+  [SPC_BSPC_TOGGLE_KEYBOARD_LAYOUT] = COMBO(toggle_layout_combo, TOGGLE_KEYBOARD_LAYOUT),
+};
+
 struct language_state_t {
     bool is_colemak;
 };
