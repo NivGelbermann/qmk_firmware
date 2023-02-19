@@ -74,10 +74,12 @@ struct language_state_t {
 struct language_state_t language_state = {true};
 
 void toggle_os_language(void) {
-    register_code(KC_LGUI);
+    register_code(KC_LCTL);
+    register_code(KC_LALT);
     register_code(KC_K);
     unregister_code(KC_K);
-    unregister_code(KC_LGUI);
+    unregister_code(KC_LALT);
+    unregister_code(KC_LCTL);
 }
 
 void toggle_language_state(void) {
