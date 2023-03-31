@@ -73,6 +73,11 @@ struct language_state_t {
 };
 struct language_state_t language_state = {true};
 
+struct os_state_t {
+    bool is_mac_os;
+};
+struct os_state_t os_state = {false};
+
 void toggle_os_language(void) {
     register_code(KC_LCTL);
     register_code(KC_LALT);
@@ -87,6 +92,10 @@ void toggle_language_state(void) {
     set_single_persistent_default_layer(language_state.is_colemak ? BASE : QWERTY);
 }
 
+void toggle_os_state(void) {
+    os_state.is_mac_os = !os_state.is_mac_os;
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (!process_layer_lock(keycode, record, LLOCK)) { return false; }
     switch(keycode) {
@@ -95,6 +104,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 toggle_language_state();
                 toggle_os_language();
                 return false;
+            }
+            break;
+
+        case CG_TOGG:
+            if (record->event.pressed) {
+                toggle_os_state();
+                return true;
             }
             break;
     }
@@ -133,9 +149,17 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
         #else
             if (clockwise) {
         #endif
-                tap_code16(C(KC_RGHT));
+                if (os_state.is_mac_os) {
+                    tap_code16(A(KC_RGHT));
+                } else {
+                    tap_code16(C(KC_RGHT));
+                }
             } else {
-                tap_code16(C(KC_LEFT));
+                if (os_state.is_mac_os) {
+                    tap_code16(A(KC_LEFT));
+                } else {
+                    tap_code16(C(KC_LEFT));
+                }
             }
         }
     }
