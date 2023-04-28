@@ -61,7 +61,7 @@ enum combos {
   DH_CAPS_WORD,
   SPC_BSPC_TOGGLE_KEYBOARD_LAYOUT,
 };
-const uint16_t PROGMEM caps_word_combo[] = {KC_D, KC_H, COMBO_END};
+const uint16_t PROGMEM caps_word_combo[] = {LCAG_T(KC_D), LCAG_T(KC_H), COMBO_END};
 const uint16_t PROGMEM toggle_layout_combo[] = {LT(NAV, KC_SPC), LT(SYM, KC_BSPC), COMBO_END};
 combo_t key_combos[COMBO_COUNT] = {
   [DH_CAPS_WORD] = COMBO(caps_word_combo, CAPSWRD),
