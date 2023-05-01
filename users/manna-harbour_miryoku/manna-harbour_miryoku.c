@@ -107,7 +107,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             break;
 
-        case CG_TOGG:
+        case KC_F14:
             if (record->event.pressed) {
                 toggle_os_state();
                 return true;
