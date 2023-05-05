@@ -76,7 +76,7 @@ struct language_state_t language_state = {true};
 struct os_state_t {
     bool is_mac_os;
 };
-struct os_state_t os_state = {false};
+struct os_state_t os_state = {true};
 
 void toggle_os_language(void) {
     register_code(KC_LCTL);
