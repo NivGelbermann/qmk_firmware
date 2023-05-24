@@ -96,6 +96,19 @@ void toggle_os_state(void) {
     os_state.is_mac_os = !os_state.is_mac_os;
 }
 
+bool handle_mac_os_modifiers(keyrecord_t *record, uint16_t keycode_for_mac_os, uint16_t keycode_for_windows) {
+    uint16_t code = (os_state.is_mac_os) ? keycode_for_mac_os : keycode_for_windows;
+    if (!record->tap.count) { // intercept hold function of modtap modifier - see here: https://github.com/qmk/qmk_firmware/blob/master/docs/mod_tap.md#changing-hold-function
+        if (record->event.pressed) {
+            register_code16(code);
+        } else {
+            unregister_code16(code);
+        }
+        return false;
+    }
+    return true;
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (!process_layer_lock(keycode, record, LLOCK)) { return false; }
     switch(keycode) {
@@ -110,9 +123,21 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case KC_F14:
             if (record->event.pressed) {
                 toggle_os_state();
-                return true;
+                return false;
             }
             break;
+
+        case LGUI_T(KC_O):    // colemak
+        case LGUI_T(KC_A):    // colemak + qwerty
+        case LGUI_T(KC_QUOT): // qwerty
+            return handle_mac_os_modifiers(record, KC_LCTL, KC_LGUI);
+
+        case LCTL_T(KC_E):    // colemak
+        case LCTL_T(KC_S):    // colemak
+        case LCTL_T(KC_K):    // qwerty
+        case LCTL_T(KC_D):    // qwerty
+            return handle_mac_os_modifiers(record, KC_LGUI, KC_LCTL);
+
     }
     return true;
 }
