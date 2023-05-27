@@ -242,7 +242,7 @@ U_NP,              U_NP,              U_NA,              U_NA,              U_NA
 #define MIRYOKU_ALTERNATIVES_NUM \
 KC_LBRC,           KC_7,              KC_8,              KC_9,              KC_RBRC,           U_NA,              U_NA,              U_NA,              U_NA,              RESET,             \
 KC_SCLN,           KC_4,              KC_5,              KC_6,              KC_EQL,            U_NA,              KC_LSFT,           KC_LCTL,           KC_LALT,           KC_LGUI,           \
-KC_GRV,            KC_1,              KC_2,              KC_3,              KC_BSLS,           U_NA,              U_NA,              U_NA,              KC_ALGR,           U_NA,              \
+KC_GRV,            KC_1,              KC_2,              KC_3,              KC_BSLS,           U_NA,              LLOCK,             U_NA,              KC_ALGR,           U_NA,              \
 U_NP,              U_NP,              KC_DOT,            KC_0,              KC_MINS,           U_NA,              U_NA,              U_NA,              U_NP,              U_NP
 
 /*
