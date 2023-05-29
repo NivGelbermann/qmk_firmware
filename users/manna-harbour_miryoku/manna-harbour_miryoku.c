@@ -130,12 +130,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case LGUI_T(KC_O):    // colemak
         case LGUI_T(KC_A):    // colemak + qwerty
         case LGUI_T(KC_QUOT): // qwerty
+        case KC_LGUI:         // layers above 0
             return handle_mac_os_modifiers(record, KC_LCTL, KC_LGUI);
 
         case LCTL_T(KC_E):    // colemak
         case LCTL_T(KC_S):    // colemak
         case LCTL_T(KC_K):    // qwerty
         case LCTL_T(KC_D):    // qwerty
+        case KC_LCTL:         // layers above 0
             return handle_mac_os_modifiers(record, KC_LGUI, KC_LCTL);
 
     }
