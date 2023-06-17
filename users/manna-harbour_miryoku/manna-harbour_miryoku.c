@@ -73,10 +73,24 @@ struct language_state_t {
 };
 struct language_state_t language_state = {true};
 
-struct os_state_t {
-    bool is_mac_os;
-};
-struct os_state_t os_state = {true};
+// Set os state in EEPROM for persistent configuration, based on: https://github.com/qmk/qmk_firmware/blob/master/docs/feature_eeprom.md
+typedef union {
+    uint32_t raw;
+    struct {
+        bool is_mac_os :1;
+    };
+} user_config_t;
+user_config_t user_config;
+
+void keyboard_post_init_user(void) {
+    user_config.raw = eeconfig_read_user();
+}
+
+void eeconfig_init_user(void) {
+  user_config.raw = 0;
+  user_config.is_mac_os = true;
+  eeconfig_update_user(user_config.raw);
+}
 
 void toggle_os_language(void) {
     register_code(KC_LCTL);
@@ -93,11 +107,12 @@ void toggle_language_state(void) {
 }
 
 void toggle_os_state(void) {
-    os_state.is_mac_os = !os_state.is_mac_os;
+    user_config.is_mac_os ^= 1;
+    eeconfig_update_user(user_config.raw);
 }
 
 bool handle_mac_os_modifiers(keyrecord_t *record, uint16_t keycode_for_mac_os, uint16_t keycode_for_windows) {
-    uint16_t code = (os_state.is_mac_os) ? keycode_for_mac_os : keycode_for_windows;
+    uint16_t code = (user_config.is_mac_os) ? keycode_for_mac_os : keycode_for_windows;
     if (!record->tap.count) { // intercept hold function of modtap modifier - see here: https://github.com/qmk/qmk_firmware/blob/master/docs/mod_tap.md#changing-hold-function
         if (record->event.pressed) {
             register_code16(code);
@@ -176,13 +191,13 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
         #else
             if (clockwise) {
         #endif
-                if (os_state.is_mac_os) {
+                if (user_config.is_mac_os) {
                     tap_code16(A(KC_RGHT));
                 } else {
                     tap_code16(C(KC_RGHT));
                 }
             } else {
-                if (os_state.is_mac_os) {
+                if (user_config.is_mac_os) {
                     tap_code16(A(KC_LEFT));
                 } else {
                     tap_code16(C(KC_LEFT));
