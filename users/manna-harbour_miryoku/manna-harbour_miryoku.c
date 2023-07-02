@@ -174,6 +174,18 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
                 tap_code(KC_VOLD);
             }
         }
+    } else if (IS_LAYER_ON(NAV)) {
+        if (index == 1) {
+        #ifdef ENCODERS_B_REVERSE
+            if (!clockwise) {
+        #else
+            if (clockwise) {
+        #endif
+                tap_code(KC_WH_D);
+            } else {
+                tap_code(KC_WH_U);
+            }
+        }
     } else {
         if (index == 0) {
             #ifdef ENCODERS_A_REVERSE
