@@ -142,6 +142,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             break;
 
+        case KC_F15:
+            if (record->event.pressed) {
+                tap_code16(KC_MINS);
+                tap_code16(KC_RABK);
+            }
+            return false;
+
         case LGUI_T(KC_O):    // colemak
         case LGUI_T(KC_A):    // colemak + qwerty
         case LGUI_T(KC_QUOT): // qwerty
