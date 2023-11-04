@@ -19,7 +19,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [NUM]    = U_MACRO_VA_ARGS(LAYOUT_miryoku, MIRYOKU_LAYER_NUM),
   [SYM]    = U_MACRO_VA_ARGS(LAYOUT_miryoku, MIRYOKU_LAYER_SYM),
   [FUN]    = U_MACRO_VA_ARGS(LAYOUT_miryoku, MIRYOKU_LAYER_FUN),
-  [BUTTON] = U_MACRO_VA_ARGS(LAYOUT_miryoku, MIRYOKU_LAYER_BUTTON)
+  [BUTTON] = U_MACRO_VA_ARGS(LAYOUT_miryoku, MIRYOKU_LAYER_BUTTON),
+  [LOL]    = U_MACRO_VA_ARGS(LAYOUT_miryoku, MIRYOKU_LAYER_LOL),
 };
 
 #if defined (MIRYOKU_KLUDGE_THUMBCOMBOS)
@@ -60,12 +61,15 @@ combo_t key_combos[COMBO_COUNT] = {
 enum combos {
   DH_CAPS_WORD,
   SPC_BSPC_TOGGLE_KEYBOARD_LAYOUT,
+  Z_SLSH_TOGGLE_LOL_LAYOUT,
 };
 const uint16_t PROGMEM caps_word_combo[] = {LCAG_T(KC_D), LCAG_T(KC_H), COMBO_END};
 const uint16_t PROGMEM toggle_layout_combo[] = {LT(NAV, KC_SPC), LT(SYM, KC_BSPC), COMBO_END};
+const uint16_t PROGMEM thumbcombos_lol[] = {LT(BUTTON, KC_Z), LT(BUTTON, KC_SLSH), COMBO_END};
 combo_t key_combos[COMBO_COUNT] = {
   [DH_CAPS_WORD] = COMBO(caps_word_combo, CAPSWRD),
   [SPC_BSPC_TOGGLE_KEYBOARD_LAYOUT] = COMBO(toggle_layout_combo, TOGGLE_KEYBOARD_LAYOUT),
+  [Z_SLSH_TOGGLE_LOL_LAYOUT] = COMBO(thumbcombos_lol, TG(LOL)),
 };
 
 struct language_state_t {

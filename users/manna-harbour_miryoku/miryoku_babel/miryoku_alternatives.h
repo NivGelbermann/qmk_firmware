@@ -129,6 +129,12 @@ LGUI_T(KC_A),      LALT_T(KC_S),      LCTL_T(KC_D),      LSFT_T(KC_F),      HYPR
 LT(BUTTON, KC_Z),  ALGR_T(KC_X),      KC_C,              LCAG_T(KC_V),      KC_B,              KC_N,              LCAG_T(KC_M),      KC_COMM,           ALGR_T(KC_DOT),    LT(BUTTON, KC_SLSH), \
 U_NP,              U_NP,              LT(MEDIA, KC_ESC), LT(MOUSE, KC_TAB), LT(NAV, KC_SPC),   LT(SYM, KC_BSPC),  LT(NUM, KC_ENT),   LT(FUN, KC_DEL),   U_NP,              U_NP
 
+#define MIRYOKU_LAYER_LOL \
+KC_1,              KC_2,              KC_3,              KC_4,              KC_TAB,            KC_NO,             KC_NO,             KC_NO,             KC_NO,             KC_NO, \
+KC_Q,              KC_W,              KC_E,              KC_R,              KC_G,              KC_NO,             LSFT_T(KC_J),      LCTL_T(KC_K),      LALT_T(KC_L),      LGUI_T(KC_QUOT), \
+LT(BUTTON, KC_Z),  KC_LCTL,           KC_D,              KC_F,              KC_V,              KC_NO,             KC_NO,             KC_NO,             KC_NO,             LT(BUTTON, KC_SLSH), \
+U_NP,              U_NP,              LT(MEDIA, KC_ESC), KC_LALT,           LT(NAV, KC_SPC),   KC_NO,             KC_NO,             KC_NO,             KC_NO,             KC_NO
+
 /*
 #define MIRYOKU_ALTERNATIVES_BASE_QWERTZ \
 KC_Q,              KC_W,              KC_E,              KC_R,              KC_T,              KC_Z,              KC_U,              KC_I,              KC_O,              KC_P,              \
