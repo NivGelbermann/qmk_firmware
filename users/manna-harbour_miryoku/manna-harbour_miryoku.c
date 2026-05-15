@@ -135,9 +135,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             if (record->event.pressed) {
                 toggle_language_state();
                 toggle_os_language();
-                return false;
             }
-            break;
+            return false;
 
         case KC_F14:
             if (record->event.pressed) {
