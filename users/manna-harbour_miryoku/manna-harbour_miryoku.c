@@ -100,6 +100,7 @@ void toggle_os_language(void) {
     register_code(KC_LCTL);
     register_code(KC_LALT);
     register_code(KC_K);
+    wait_ms(50);
     unregister_code(KC_K);
     unregister_code(KC_LALT);
     unregister_code(KC_LCTL);
