@@ -86,8 +86,20 @@ typedef union {
 } user_config_t;
 user_config_t user_config;
 
+// On macOS the Cmd key belongs on the middle finger and Ctrl on the pinky, which
+// is the reverse of the Miryoku default. QMK's built-in CTL/GUI swap does this via
+// mod_config() at action-lookup time, so mod-taps still reach process_action() as
+// ordinary mod-taps. That is what keeps BILATERAL_COMBINATIONS working: intercepting
+// these keys in process_record_user() and returning false skipped process_action()
+// entirely, so the same-hand-rollover correction never armed for Cmd and Ctrl.
+void apply_os_state(void) {
+    keymap_config.swap_lctl_lgui = user_config.is_mac_os;
+    eeconfig_update_keymap(keymap_config.raw);
+}
+
 void keyboard_post_init_user(void) {
     user_config.raw = eeconfig_read_user();
+    apply_os_state();
 }
 
 void eeconfig_init_user(void) {
@@ -114,19 +126,7 @@ void toggle_language_state(void) {
 void toggle_os_state(void) {
     user_config.is_mac_os ^= 1;
     eeconfig_update_user(user_config.raw);
-}
-
-bool handle_mac_os_modifiers(keyrecord_t *record, uint16_t keycode_for_mac_os, uint16_t keycode_for_windows) {
-    uint16_t code = (user_config.is_mac_os) ? keycode_for_mac_os : keycode_for_windows;
-    if (!record->tap.count) { // intercept hold function of modtap modifier - see here: https://github.com/qmk/qmk_firmware/blob/master/docs/mod_tap.md#changing-hold-function
-        if (record->event.pressed) {
-            register_code16(code);
-        } else {
-            unregister_code16(code);
-        }
-        return false;
-    }
-    return true;
+    apply_os_state();
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -152,20 +152,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 tap_code16(KC_RABK);
             }
             return false;
-
-        case LGUI_T(KC_O):    // colemak
-        case LGUI_T(KC_A):    // colemak + qwerty
-        case LGUI_T(KC_QUOT): // qwerty
-        case KC_LGUI:         // layers above 0
-            return handle_mac_os_modifiers(record, KC_LCTL, KC_LGUI);
-
-        case LCTL_T(KC_E):    // colemak
-        case LCTL_T(KC_S):    // colemak
-        case LCTL_T(KC_K):    // qwerty
-        case LCTL_T(KC_D):    // qwerty
-        case KC_LCTL:         // layers above 0
-            return handle_mac_os_modifiers(record, KC_LGUI, KC_LCTL);
-
     }
     return true;
 }

@@ -117,6 +117,10 @@ uint16_t keycode_config(uint16_t keycode) {
     }
 }
 
+// Bit 4 of a mod field marks the mods as right-hand ones. See enum mods_bit in
+// action_code.h for the full layout.
+#define MOD_RIGHT_HAND_FLAG 0x10
+
 /** \brief mod_config
  *
  *  This function checks the mods passed to it against the bootmagic config,
@@ -143,12 +147,19 @@ uint8_t mod_config(uint8_t mod) {
         }
     }
     if (keymap_config.swap_lctl_lgui) {
-        if ((mod & MOD_RGUI) == MOD_LGUI) {
-            mod &= ~MOD_LGUI;
-            mod |= MOD_LCTL;
-        } else if ((mod & MOD_RCTL) == MOD_LCTL) {
-            mod &= ~MOD_LCTL;
-            mod |= MOD_LGUI;
+        // Swap the Ctrl and GUI bits on their own so that multi-mod keycodes keep
+        // every other mod they carry. Comparing (mod & MOD_RGUI) against MOD_LGUI
+        // only tells the truth when exactly one of bits 0-3 is set: Hyper (0x0F)
+        // and LCAG (0x0D) both alias into that test and come out without GUI.
+        if (!(mod & MOD_RIGHT_HAND_FLAG)) {
+            uint8_t swapped_mods = mod & ~(MOD_LCTL | MOD_LGUI);
+            if (mod & MOD_LCTL) {
+                swapped_mods |= MOD_LGUI;
+            }
+            if (mod & MOD_LGUI) {
+                swapped_mods |= MOD_LCTL;
+            }
+            mod = swapped_mods;
         }
     }
     if (keymap_config.swap_rctl_rgui) {
